@@ -1,0 +1,15 @@
+spring:
+  test: "Prod-test"
+aws:
+  s3:
+    bucket:
+      landing: ${LANDING_BUCKET}
+      logging: ${LOGGING_BUCKET_NAME}
+    key:
+      youtube: ${YOUTUBE_BUCKET_KEY}
+      logging: ${LOGGING_BUCKET_KEY}
+      title: ${TITLE_BUCKET_KEY}
+youtube:
+  api:
+    endpoint:
+    key:
