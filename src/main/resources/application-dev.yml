@@ -12,5 +12,11 @@ aws:
       title: ${TITLE_BUCKET_KEY}
 youtube:
   api:
-    endpoint:
-    key:
+    clientid: ${CLIENT_ID}
+    clientsecret: ${CLIENT_SECRET}
+    authuri: ${AUTH_URI}
+    tokenuri: ${TOKEN_URI}
+    certurl: ${AUTH_PROVIDER_CERT_URL}
+    redirecturi: ${REDIRECT_URI}
+    refresh:
+      token: ${YOUTUBE_REFRESH_TOKEN}
