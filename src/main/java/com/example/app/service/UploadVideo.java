@@ -30,7 +30,7 @@ public class UploadVideo {
 
         VideoSnippet snippet = new VideoSnippet();
         snippet.setTitle(title);
-        snippet.setDescription("Hey! Thank you for watching my youtube short! Please feel free to leave a comment in the comment section below!");
+        snippet.setDescription("Hey! Thank you for watching my youtube short! n this YouTube Shorts video, we dive into some mind-blowing facts about [insert topic]. These quick and fun trivia facts will keep you entertained and make you say 'Wow!' Don't forget to like, comment, and subscribe for daily" + " #Shorts #YouTubeShorts #ShortVideo #Viral #Trending #Facts #DidYouKnow #FunFacts #RandomFacts #InterestingFacts #FunTrivia #MindBlowingFacts #KnowledgeIsPower #Educational #LearnSomethingNew #HistoryFacts #ScienceFacts #PopCultureFacts #WeirdFacts #AmazingFacts #LifeHacks #IncredibleFacts #DailyFacts #ForYou #FYP #MustKnow #InterestingContent #FactsAboutLife #KnowledgeSharing #TriviaTime #QuickFacts #FunFactFriday");
         snippet.setTags(Collections.singletonList("example"));
         video.setSnippet(snippet);
 
