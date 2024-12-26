@@ -17,7 +17,7 @@ public class ServiceTrigger {
     private GetVideoFile getVideoFile;
     private ReadFile readFile;
     private OAuth2 oAuth2;
-    // private RefreshToken refreshToken;
+    private RefreshToken refreshToken;
     private UploadVideo uploadVideo;
 
     @Value("${spring.profiles.active}")
@@ -57,14 +57,14 @@ public class ServiceTrigger {
     private String redirectUri;
 
     @Value("${youtube.api.refresh.token}")
-    private String Token;
+    private String LongLivedToken;
 
-    public ServiceTrigger(S3LoggingService s3LoggingService, GetVideoFile getVideoFile, ReadFile readFile, OAuth2 oAuth2, UploadVideo uploadVideo){
+    public ServiceTrigger(S3LoggingService s3LoggingService, GetVideoFile getVideoFile, ReadFile readFile, OAuth2 oAuth2, UploadVideo uploadVideo, RefreshToken refreshToken){
         this.s3LoggingService = s3LoggingService;
         this.getVideoFile = getVideoFile;
         this.readFile = readFile;
         this.oAuth2 = oAuth2;
-      //  this.refreshToken = refreshToken;
+        this.refreshToken = refreshToken;
         this.uploadVideo = uploadVideo;
     }
 
@@ -82,10 +82,10 @@ public class ServiceTrigger {
         Path youtubeVideoToPost = getVideoFile.getVideo(landingBucket, youtubeKey);
         
         //Service 3: get Refresh Token - ONLY UNCOMMENT IF YOU NEED A NEW REFRESH TOKEN - DOES NOT WORK ON LAMBDA
-        // String oAuthRefreshToken = refreshToken.getRefreshToken(clientId,clientSecret,authUri,tokenUri,redirectUri);
+        String oAuthRefreshToken = refreshToken.getRefreshToken(clientId,clientSecret,authUri,tokenUri,LongLivedToken);
 
         //Service 4 Authenticate with Oauth
-        YouTube youtube = oAuth2.authenticate(Token,clientId,clientSecret,tokenUri);
+        YouTube youtube = oAuth2.authenticate(oAuthRefreshToken,clientId,clientSecret,tokenUri);
 
         //service 5
         uploadVideo.uploadVideo(youtube, youtubeVideoToPost, videoTitle);
