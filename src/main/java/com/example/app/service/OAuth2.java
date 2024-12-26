@@ -33,6 +33,8 @@ public class OAuth2 {
                         .setRefreshToken(Token)
                         .setTokenServerUri(new java.net.URI(tokenUri))
                         .build();
+
+        log.info("Successfully Authenticated with Youtube Via OAuth2.");
             
         return new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, new HttpCredentialsAdapter(credentials)).setApplicationName("Youtube Uploader").build();
     }

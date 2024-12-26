@@ -17,7 +17,7 @@ public class ServiceTrigger {
     private GetVideoFile getVideoFile;
     private ReadFile readFile;
     private OAuth2 oAuth2;
-   // private RefreshToken refreshToken;
+    // private RefreshToken refreshToken;
     private UploadVideo uploadVideo;
 
     @Value("${spring.profiles.active}")
@@ -82,7 +82,7 @@ public class ServiceTrigger {
         Path youtubeVideoToPost = getVideoFile.getVideo(landingBucket, youtubeKey);
         
         //Service 3: get Refresh Token - ONLY UNCOMMENT IF YOU NEED A NEW REFRESH TOKEN - DOES NOT WORK ON LAMBDA
-        //String oAuthRefreshToken = refreshToken.getRefreshToken(clientId,clientSecret,authUri,tokenUri,redirectUri);
+        // String oAuthRefreshToken = refreshToken.getRefreshToken(clientId,clientSecret,authUri,tokenUri,redirectUri);
 
         //Service 4 Authenticate with Oauth
         YouTube youtube = oAuth2.authenticate(Token,clientId,clientSecret,tokenUri);
@@ -98,7 +98,7 @@ public class ServiceTrigger {
         //TODO Task 6: implement unit testing
         } catch (Exception e){
             log.error("Error during video upload: {}", e.getMessage(), e);
-            s3LoggingService.logMessageToS3("Error: Uploading Youtube Video ServiceTrigger.java line 88: " + LocalDate.now() + " On: youtube-service-5" + ",");
+            s3LoggingService.logMessageToS3("Error: Uploading Youtube Video ServiceTrigger.java line 88, Check if refresh token has expired: " + LocalDate.now() + " On: youtube-service-5" + ",");
         }
     }
 }
