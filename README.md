@@ -22,3 +22,46 @@ This step is required untill we create a solution to get a new refresh token for
 
 9. Your new access token should work for a period of atleast a week. 
 
+# Oauth2 Refresh Token for Serverless Archetype
+Nativly, we cannot refresh an Oauth2 token via Java applicaiton Service, so, what we need to do is implement a process to obtain a new access token from the stored one so it can interact wihtout the user
+
+This process alows us to create new refresh tokens for authentication while using the serverless archetype.
+
+1. Generate your initial refreshToken on google cloud(for google cloud Auth)
+
+2. Store that refresh token in an environment variable(Ours is in service trigger as LongLivedToken)
+
+
+## Detailed Below
++---------------------------------------+
+| Stored LongLivedToken(Obtain from Google Cloud) |
+| Source: Environment Variable / Config file |
++---------------------------------------+
+              |
+              v
++-----------------------------+
+| RefreshToken Service        |
+|                             |
+| Input:                     |
+| - clientId                 |
+| - clientSecret             |
+| - tokenUri                 |
+| - LongLivedToken |
+|                             |
+| Output:                    |
+| - New Access Token          |
++-----------------------------+
+              |
+              v
++-----------------------------+
+| OAuth2 Authentication       |
+|                             |
+| Input:                     |
+| - New Access Token          |
+| - clientId                 |
+| - clientSecret             |
+| - tokenUri                 |
+|                             |
+| Output:                    |
+| - YouTube Client (YouTube)  |
++-----------------------------+
