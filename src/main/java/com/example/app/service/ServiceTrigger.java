@@ -85,6 +85,7 @@ public class ServiceTrigger {
 
         //Service 2 Get Tags
         String tags = getTags.getTags(landingBucket, tagsKey);
+        log.info("tags are: " + tags);
         
         //Service 2: Download the Youtube Video
         Path youtubeVideoToPost = getVideoFile.getVideo(landingBucket, youtubeKey);
