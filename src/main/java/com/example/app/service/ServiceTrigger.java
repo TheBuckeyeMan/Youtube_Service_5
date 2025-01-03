@@ -19,6 +19,7 @@ public class ServiceTrigger {
     private OAuth2 oAuth2;
     private RefreshToken refreshToken;
     private UploadVideo uploadVideo;
+    private GetTags getTags;
 
     @Value("${spring.profiles.active}")
     private String environment;
@@ -59,13 +60,17 @@ public class ServiceTrigger {
     @Value("${youtube.api.refresh.token}")
     private String LongLivedToken;
 
-    public ServiceTrigger(S3LoggingService s3LoggingService, GetVideoFile getVideoFile, ReadFile readFile, OAuth2 oAuth2, UploadVideo uploadVideo, RefreshToken refreshToken){
+    @Value("${aws.s3.key.tags}")
+    private String tagsKey;
+
+    public ServiceTrigger(S3LoggingService s3LoggingService, GetVideoFile getVideoFile, ReadFile readFile, OAuth2 oAuth2, UploadVideo uploadVideo, RefreshToken refreshToken, GetTags getTags){
         this.s3LoggingService = s3LoggingService;
         this.getVideoFile = getVideoFile;
         this.readFile = readFile;
         this.oAuth2 = oAuth2;
         this.refreshToken = refreshToken;
         this.uploadVideo = uploadVideo;
+        this.getTags = getTags;
     }
 
     public void TriggerService(){
@@ -77,6 +82,9 @@ public class ServiceTrigger {
         //Trigger Services
         //Service 1: Download the Youtube Video Title
         String videoTitle = readFile.getBasicFileContents(landingBucket, titleKey);
+
+        //Service 2 Get Tags
+        String tags = getTags.getTags(landingBucket, tagsKey);
         
         //Service 2: Download the Youtube Video
         Path youtubeVideoToPost = getVideoFile.getVideo(landingBucket, youtubeKey);
@@ -88,7 +96,7 @@ public class ServiceTrigger {
         YouTube youtube = oAuth2.authenticate(oAuthRefreshToken,clientId,clientSecret,tokenUri);
 
         //service 5
-        uploadVideo.uploadVideo(youtube, youtubeVideoToPost, videoTitle);
+        uploadVideo.uploadVideo(youtube, youtubeVideoToPost, videoTitle, tags);
 
         //Service 4: Save the audio file to the aws s3 bucket
         log.info("The Youtube Video Has Been Posted");
@@ -98,7 +106,7 @@ public class ServiceTrigger {
         //TODO Task 6: implement unit testing
         } catch (Exception e){
             log.error("Error during video upload: {}", e.getMessage(), e);
-            s3LoggingService.logMessageToS3("Error: Uploading Youtube Video ServiceTrigger.java line 88, Check if refresh token has expired: " + LocalDate.now() + " On: youtube-service-5" + ",");
+            s3LoggingService.logMessageToS3("Error: Uploading Youtube Video ServiceTrigger.java line 88, Check if refresh token has expired, or if daily video limit has been exceeded: " + LocalDate.now() + " On: youtube-service-5" + ",");
         }
     }
 }
